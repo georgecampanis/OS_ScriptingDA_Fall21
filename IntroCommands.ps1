@@ -1,7 +1,7 @@
-Get-Process | Sort-Object -Property CPU |  Select-Object -First 10
+Get-Process | Sort-Object -Property CPU |  Select-Object -First 20 > lstProcess.txt
 
 <#
-my directory: "C:\Users\w0038182\OneDrive - Nova Scotia Community College\Classes\Fall2020\INET - Server Scripting\GroupB\PSScripts"
+
 F8 - runs selected text
 F5 - runs all text
 ctrl C will escape
@@ -26,6 +26,7 @@ help Start-Process -Full
 dir # list directories could use ls too
 ls
 
+# DA Class
 ###################################
 #Piping and Routing
 ###################################
