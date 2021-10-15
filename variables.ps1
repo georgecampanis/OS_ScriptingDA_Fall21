@@ -84,6 +84,14 @@ specifies the contents of the C:\Windows directory.
 
 Get-Help Get-ChildItem -full >C:\temp\help.txt
 notepad C:\temp\help.txt
+
+Get-ChildItem -path c:\windows\System32 -include *.log  -recurse -name 
+#('*.txt','*.log') -recurse -name
+
+
+-recurse
+
+
 Get-ChildItem c:\windows\System32 *.txt  -recurse -name # -name will only retrieve the names of items found
 
 Get-ChildItem -path c:\windows\System32 -include *.txt  -recurse -name
@@ -108,8 +116,9 @@ Get-ChildItem -recurse -name  c:\windows\System32 *.txt
 help Get-Process -full >C:\temp\getprocess_help.txt
 notepad C:\temp\getprocess_help.txt
 
-Get-Process ('dwm','Idle')
+Get-Process ('dwm','Idle','YourPhone')
 
+#=> DA here===>
 #################################################################
 $alias:Dir
 $alias:ls
@@ -147,7 +156,7 @@ edit
 #########################################
 # Variables
 #########################################
-#=> DBA here===>
+
 
 # Create variables and assign to values
 $amount = 120
