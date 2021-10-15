@@ -38,7 +38,8 @@ fed into the command on the right side of the pipe symbol. This kind of piping i
 PowerShell as the "pipeline":
 #>
 Get-Process | more 
-dir | Sort-Object -property Length, Name
+dir | Sort-Object -property  Name, Length
+dir | Sort-Object -property  LastWriteTime , Name, Length 
 ls | Sort-Object -property LastWriteTime 
 ls | Sort-Object -property LastWriteTime -Descending | Select-Object -Last 3
 
