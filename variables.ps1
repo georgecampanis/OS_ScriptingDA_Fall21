@@ -138,6 +138,8 @@ Get-alias -name Dir
 Get-Alias | Where-Object {$_.Definition -eq "Get-ChildItem"}
 Get-Alias | Where-Object {$_.Definition -eq "Get-Process"}
 
+Get-Alias | ? {$_.Definition -eq "Get-Process"}
+Get-Alias | where {$_.Definition -eq "Get-Process"}
 
 Dir alias: | Out-String -Stream | Select-String "Get-ChildItem"
 
