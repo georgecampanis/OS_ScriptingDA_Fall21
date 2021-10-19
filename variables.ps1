@@ -273,6 +273,9 @@ Dir variable:\te*
 #Clear-Variable a <=>  $a = $null
 #Set-Variable a 12 <=> $a = 12
 
+###############################################
+#         Write-protection   
+###############################################
 # Create new variable with description and write-protection:
 New-Variable test -value 100 -description "test variable with write-protection" -option ReadOnly
 $test
