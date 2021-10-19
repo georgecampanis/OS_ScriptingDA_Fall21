@@ -210,6 +210,51 @@ $Value1, $Value2 = $Value2, $Value1
 $Value2
 $Value1
 
+
+
+<#
+-ClearVariable-
+Clears the contents of a variable, but not the variable
+itself. The subsequent value of the variable is NULL
+(empty). If a data or object type is specified for the
+variable, by using Clear-Variable the type of the
+objected stored in the variable will be preserved.
+
+ClearVariable a
+same as:
+$a = $null
+
+-GetVariable-
+Gets the variable object, not the value in which the
+variable is stored.
+
+Get-Variable a
+
+-NewVariable-
+Creates a new variable and can set special variable
+options
+
+NewVariable value 12
+
+-RemoveVariable-
+Deletes the variable, and its contents, as long as the
+variable is not a constant or is created by the
+system.
+
+RemoveVariable a
+same as: del variable:\a
+
+-SetVariable-
+Resets the value of variable or variable options such
+as a description and creates a variable if it does not
+exist.
+
+Set-Variable a 12
+same as: $a = 12
+
+
+#>
+
 #finding vars
 Get-ChildItem variable:value*
 
