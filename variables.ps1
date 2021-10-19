@@ -117,6 +117,7 @@ help Get-Process -full >C:\temp\getprocess_help.txt
 notepad C:\temp\getprocess_help.txt
 
 Get-Process ('dwm','Idle','YourPhone')
+gps ('dwm','Idle','YourPhone')
 
 #=> DA here===>
 #################################################################
@@ -135,6 +136,9 @@ of aliases in their entirety:
 Get-alias -name Dir
 
 Get-Alias | Where-Object {$_.Definition -eq "Get-ChildItem"}
+Get-Alias | Where-Object {$_.Definition -eq "Get-Process"}
+
+
 Dir alias: | Out-String -Stream | Select-String "Get-ChildItem"
 
 Dir alias: | Group-Object definition
@@ -224,6 +228,41 @@ Dir variable:\te*
 del variable:\test
 # variable is removed from the listing:
 Dir variable:\te*
+
+<#
+-ClearVariable-
+Clears the contents of a variable, but not the variable
+itself. The subsequent value of the variable is NULL
+(empty). If a data or object type is specified for the
+variable, by using Clear-Variable the type of the
+objected stored in the variable will be preserved.
+ClearVariable a
+same as:
+$a = $null
+-GetVariable-
+Gets the variable object, not the value in which the
+variable is stored.
+Get-Variable a
+-NewVariable-
+Creates a new variable and can set special variable
+options
+NewVariable value 12
+-RemoveVariable-
+Deletes the variable, and its contents, as long as the
+variable is not a constant or is created by the
+system.
+RemoveVariable a
+same as: del variable:\a
+-SetVariable-
+Resets the value of variable or variable options such
+as a description and creates a variable if it does not
+exist.
+Set-Variable a 12
+same as: $a = 12
+#>
+
+
+
 
 #Clear-Variable a <=>  $a = $null
 #Set-Variable a 12 <=> $a = 12
