@@ -163,7 +163,6 @@ edit
 # Variables
 #########################################
 
-
 # Create variables and assign to values
 $amount = 120
 $VAT = 0.19
@@ -216,6 +215,18 @@ $Value1, $Value2 = $Value2, $Value1
 $Value2
 $Value1
 
+Clear-Variable Value1
+$Value2 = $null
+
+Get-Variable Value2, Value1, value3
+
+New-Variable value3 12
+
+#Remove-Variable a
+#del variable:\value3
+
+get-variable *
+dir variable: 
 
 
 <#
@@ -265,7 +276,10 @@ same as: $a = 12
 Get-ChildItem variable:value*
 
 # Verify whether the variable $value2 exists:
+$value2=1000
 Test-Path variable:\value2
+Test-Path C:\temp
+
 
 # create a test variable:
 $test = 1
@@ -345,14 +359,20 @@ New-Variable test -value 100 -description "test variable" -force
 
 
 Get-ChildItem variable:te*
+
+
+# 
 # variable contains a description:
 dir Variable:\test | Format-Table Name, Value, Description -autosize
 
 dir Variable:\*| Format-Table Name, Value, Description -autosize
 
+dir Variable:\value2| Format-Table Name, Description -autosize
+
 
 # normal variables may be overwritten with -force without difficulty.
 $available = 123
+$available = 123456
 New-Variable available -value 100 -description "test variable" -force
 
 
@@ -367,14 +387,18 @@ Get-Process -id $PID
 
 #Reading Particular Environment Variables
 $env:windir
+ get-process -ComputerName $env:COMPUTERNAME
 
 
 # push in current locaction to a stack :
 Push-Location
 # change to Windows folder
 cd $env:windir
-Dir
+Push-Location
+
+cd C:\temp
 # pop back to initial location after executed task
+Pop-Location
 Pop-Location
 
 ##Searching for Environment Variables
@@ -399,19 +423,99 @@ $command = "`${$env:windir\PFRO.log}"
 Invoke-Expression $command
 #$command
 
-"Result = $(2+2)"
+
+$thisV = "{$env:windir\PFRO.log}"
+$command = "`$$thisV"
+Invoke-Expression $command
+$command
+
+
+
+"Result = `$(2+2)"
 
 
 # Get file:
-$file = "`${$env:windir\PFRO.log}"
+$file = dir "$env:windir\PFRO.log"
+$file.Length
+
+"The size of the file is $([Math]::Round($file.Length/1KB,3)) kilo bytes."
+
+#$file = "${$env:windir\PFRO.log}"
 # File size given by length property:
-$file.length
+
 # To embed the file size in text, ad hoc variables are required:
-"The size of the file is $($file.Length) bytes."
 
 
+$fl=get-item "$env:windir\PFRO.log"
+
+$fl | measure length -sum
+$fl.Length
+
+"The size of the file is $($fl.Length) bytes."
+
+###############################################
+#  SCOPE   (global, local, private, and script)
+###############################################
+
+#PowerShell will automatically restrict the visibility of its variables
+Notepad test1.ps1 # create script , add
+
+<#
+$windows = $env:windir
+"Windows Folder: $windows"
+# run 
+cd C:\temp
+.\test1.ps1
+#>
+
+# then try 
+$windows = "Hello"
+.\test1.ps1
+$windows
+# Notice that we have two seperate scopes 
+<# PowerShell normally creates its own variable scope for every script and every function.
+You can easily find out how the result would have looked without automatic restrictions on variable
+visibility. All you do is type a single dot "." before the script file path to turn off restrictions on
+visibility. Type a dot and a space in front of the script: #>
+
+$windows = "Hello"
+.\test1.ps1
+$windows
+. .\test1.ps1
+$windows
+
+
+#Constants that you create in scripts are  write-protected only within the script.
+Notepad test2.ps1
+# save this into fil
 New-Variable a -value 1 -option Constant
 "Value: $a"
+
+run file
+.\test2.ps1
+
+. .\test2.ps1
+$a=2
+$a
+
+
+#####################
+### ALL SCOPE
+
+# Test function with its own local variable scope tries to
+# redefine the variable $setValue:
+Function Test {$setValue = 99; $setValue }
+# Read-only variable is created. Test function may modify this
+# value nevertheless by creating a new local variable:
+New-Variable setValue -option "ReadOnly" -value 200
+Test
+
+# Variable is created with the AllScope option and automatically
+# copied to local variable scope. Overwriting is now no longer
+# possible.
+Remove-Variable setValue -force
+New-Variable setValue -option "ReadOnly,AllScope" -value 200
+Test
 
 
 # The variable will be created only in the current scope and not
@@ -510,13 +614,3 @@ $list.servers
 # The result could be output again as text, including the
 # modification:
 $list.get_InnerXML()
-
-
-$email = "george.campanis@nscc.ca"
-$v = Get-Variable email
-$pattern = "\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b"
-$v.Attributes.Add($(New-Object `System.Management.Automation.ValidatePatternAttribute  -argumentList $pattern))
-
-$email = "valid@email.ca"
-
-$email = "invalid@email"
