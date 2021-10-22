@@ -117,9 +117,9 @@ help Get-Process -full >C:\temp\getprocess_help.txt
 notepad C:\temp\getprocess_help.txt
 
 Get-Process ('dwm','Idle','YourPhone')
-gps ('dwm','Idle','YourPhone')
+gps ("dwm","Idle","YourPhone")
 
-#=> DA here===>
+
 #################################################################
 $alias:Dir
 $alias:ls
@@ -145,9 +145,9 @@ Dir alias: | Out-String -Stream | Select-String "Get-ChildItem"
 
 Dir alias: | Group-Object definition
 ##############################################################
-Set-Alias edit notepad.exe # create your own alias
+Set-Alias edit notepad.exe -Option "Allscope" -Scope "Global" # create your own alias
 edit
-$alias:edit
+$alias:edit 
 
 
 Export-Alias "C:\temp\myalias"
@@ -164,15 +164,17 @@ edit
 #########################################
 
 # Create variables and assign to values
-$amount = 120
+[double]$amount = 120.1
 $VAT = 0.19
 # Calculate:
-$result = $amount * $VAT
+$result = [Math]::Round($amount * $VAT,2)
 # Output result
 $result
 
 # Replace variables in text with values:
-[string]$text = "Net amount $amount matches gross amount $result"
+$text = "Net amount $amount matches gross amount $result"
+$text = "Net amount $ $amount matches gross amount $ $result"
+$text = "Net amount `$$amount matches gross amount `$$result"
 $text
 
 
@@ -198,6 +200,14 @@ $a
 
 $Value1 = 10
 $Value2 = 20
+
+$Value1=$Value2 
+$Value2=$Value1
+
+$Value1
+$Value2 
+
+
 $Temp = $Value1
 $Value1 = $Value2
 $Value2 = $Temp
@@ -225,10 +235,12 @@ New-Variable value3 12
 #Remove-Variable a
 #del variable:\value3
 
+del variable:\Value2
+
 get-variable *
 dir variable: 
 
-
+####===> Start DA class Here
 <#
 -ClearVariable-
 Clears the contents of a variable, but not the variable
@@ -448,7 +460,7 @@ $file.Length
 
 $fl=get-item "$env:windir\PFRO.log"
 
-$fl | measure length -sum
+
 $fl.Length
 
 "The size of the file is $($fl.Length) bytes."
