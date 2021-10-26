@@ -283,9 +283,12 @@ same as: $a = 12
 
 
 #>
+New-Variable value 12
+$value1=14
 
 #finding vars
 Get-ChildItem variable:value*
+ls variable:value*
 
 # Verify whether the variable $value2 exists:
 $value2=1000
@@ -301,7 +304,8 @@ Dir variable:\te*
 del variable:\test
 # variable is removed from the listing:
 Dir variable:\te*
-
+$test = 1
+Remove-Variable test
 <#
 -ClearVariable-
 Clears the contents of a variable, but not the variable
@@ -344,26 +348,29 @@ same as: $a = 12
 #         Write-protection   
 ###############################################
 # Create new variable with description and write-protection:
-New-Variable test -value 100 -description "test variable with write-protection" -option ReadOnly
-$test
+New-Variable test2 -value 200 -description "test variable with write-protection" -option ReadOnly
+$test2
 
 
 # Variable contents cannot be modified:
 $test = 200
 
-del variable:\test -force
-$test = 200
+del Variable:\test2
+del Variable:\test2 -force
+
 
 
 #New-Variable cannot write over existing variables:
-New-Variable test -value 100 -description  "test variable with copy protection" -option Constant
+New-Variable testConst -value 1000 -description  "test variable with copy protection" -option Constant
+$testConst
 
+del variable:\testConst -force
 
-del variable:\test -force
-New-Variable test -value 100 -description  "test variable with copy protection" ` -option Constant
+ls Variable:
+New-Variable test3 -value 100  -option Constant
 # variables with the "Constant" option may neither be
 # modified nor deleted:
-del variable:\test -force
+del Variable:\test3 -force
 
 # Parameter -force overwrites existing variables if these do not
 # use the "Constant" option:
@@ -375,13 +382,22 @@ Get-ChildItem variable:te*
 
 # 
 # variable contains a description:
-dir Variable:\test | Format-Table Name, Value, Description -autosize
+dir Variable:\te* | Format-Table  Name, Value, Description -autosize
+New-Variable test4 -value 100 -description "test variable" -Option Readonly
+New-Variable test5 -value 100 
+
+Get-Variable test | Select *
+
+##### Can we show the option type e.g. Constant, ReadOnly, AllScope...?????
+dir Variable:\te* | Format-Table  Name, options, Visibility -autosize
+
+
 
 dir Variable:\*| Format-Table Name, Value, Description -autosize
 
-dir Variable:\value2| Format-Table Name, Description -autosize
+dir Variable:\te*| Format-Table Name, Description -autosize
 
-
+help Variable: > C:\temp\vars.txt
 # normal variables may be overwritten with -force without difficulty.
 $available = 123
 $available = 123456
@@ -389,7 +405,7 @@ New-Variable available -value 100 -description "test variable" -force
 
 
 #all f automatic variables 
-Dir variable: | Sort-Object Name | Format-Table Name, Description -autosize -wrap
+Dir variable: | Sort-Object name | Format-Table Name,  Description -autosize -wrap
 
 # Verify user profile:
 $HOME
