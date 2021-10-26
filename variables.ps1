@@ -410,13 +410,17 @@ Dir variable: | Sort-Object name | Format-Table Name,  Description -autosize -wr
 # Verify user profile:
 $HOME
 
+
 #"current process -ID of PowerShell is $PID"
 Get-Process -id $PID
+
+$PSHOME
 
 #Reading Particular Environment Variables
 $env:windir
  get-process -ComputerName $env:COMPUTERNAME
 
+ Get-WmiObject -class Win32_OperatingSystem
 
 # push in current locaction to a stack :
 Push-Location
@@ -466,7 +470,11 @@ $command
 $file = dir "$env:windir\PFRO.log"
 $file.Length
 
-"The size of the file is $([Math]::Round($file.Length/1KB,3)) kilo bytes."
+"The size of the file is $([Math]::Round($file.Length/1KB,3)) kilobytes."
+
+$fileSz= [Math]::Round($file.Length/1KB,3)
+"The size of the file is $fileSz kilobytes."
+
 
 #$file = "${$env:windir\PFRO.log}"
 # File size given by length property:
@@ -480,7 +488,7 @@ $fl=get-item "$env:windir\PFRO.log"
 $fl.Length
 
 "The size of the file is $($fl.Length) bytes."
-
+### DA Class to start here====>
 ###############################################
 #  SCOPE   (global, local, private, and script)
 ###############################################
