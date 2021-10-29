@@ -726,6 +726,9 @@ $xd.GetType().Name
 [Byte]$flag = 12
 $flag.GetType().Name
 
+[int16]::MinValue
+[int16]::MaxValue
+
 $date = "November 12, 2004"
 $date
 $date.GetType().Name
