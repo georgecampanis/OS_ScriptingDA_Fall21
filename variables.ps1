@@ -488,7 +488,8 @@ $fl=get-item "$env:windir\PFRO.log"
 $fl.Length
 
 "The size of the file is $($fl.Length) bytes."
-### DA Class to start here====>
+
+
 ###############################################
 #  SCOPE   (global, local, private, and script)
 ###############################################
@@ -496,13 +497,64 @@ $fl.Length
 #PowerShell will automatically restrict the visibility of its variables
 Notepad test1.ps1 # create script , add
 
+if("MyString" -eq "MYSTRING")
+{
+    "They are equal!"
+}else {
+    "They are NOT equal!"
+}
+
+[string] $str1= "MyString"
+[string] $str2= "MYSTRING"
+
+if($str1 -eq $str2)
+{
+    "They are equal!"
+}else {
+    "They are NOT equal!"
+}
+
+$env:windir
 <#
 $windows = $env:windir
 "Windows Folder: $windows"
 # run 
 cd C:\temp
 .\test1.ps1
+
+$ComputerName = $env:COMPUTERNAME
+"My ComputerName is: $ComputerName"
 #>
+
+
+
+$ComputerName="DefaultName"
+cd C:\temp
+.\test1.ps1
+
+$ComputerName
+
+
+
+<#
+
+
+
+
+
+
+
+ICE 3 - 
+
+dir Variable: | Format-Table  Name, Value, options  >> C:\temp\vars.txt
+$file = dir "C:\temp\vars.txt"
+$flSizeText="The size of the file is $([Math]::Round($file.Length/1KB,3)) kilobytes."
+#>
+
+
+
+
+
 
 # then try 
 $windows = "Hello"
@@ -519,7 +571,6 @@ $windows = "Hello"
 $windows
 . .\test1.ps1
 $windows
-
 
 #Constants that you create in scripts are  write-protected only within the script.
 Notepad test2.ps1
@@ -593,10 +644,21 @@ Function fntest {
 }
 # Create variable in console scope and call test function:
 $x = 12
-fntest
+fntest #12
 # After calling test function, control modifications in console scope:
 $x
+########################################################
+Remove-Variable x -force
+New-Variable x -option "AllScope" -value 2000
+fntest #1000
 
+$x
+########################################################
+Remove-Variable x -force
+New-Variable x -option "ReadOnly" -value 2000
+fntest #2000
+
+$x
 #########
 Function fntest { 
     "variable = $x"; 
@@ -608,10 +670,14 @@ fntest
 # After calling test function, control modifications in console scope:
 $x
 
+$xx=10/5.7
+$xx
+
+$xx.GetType().Name
 
 ###Variable Types and "Strongly Typing"
 (12).GetType().Name
-(1000000000000).GetType().Name
+(-100000000000).GetType().Name
 (12.5).GetType().Name
 (12d).GetType().Name
 ("H").GetType().Name
@@ -622,16 +688,24 @@ $flag.GetType().Name
 
 $date = "November 12, 2004"
 $date
+$date.GetType().Name
 
 
 [datetime]$date = "November 12, 2004"
+$date.GetType().Name
 $date
 $date.AddDays(-60)
 
-
+#Max/Min of a datatype
+#(12).GetType()| Select *
 
 # PowerShell stores a text in XML format as a string:
-$t = "<servers><server name='PC1' ip='10.10.10.10'/>" +  "<server name='PC2' ip='10.10.10.12'/></servers>"
+$t = "<servers>" +
+"<server name='PC1' ip='10.10.10.10' user='George' />" +
+"<server name='PC2' ip='10.10.10.12' user='Mary'/>" +
+"<server name='PC3' ip='10.10.10.13' user='Bob'/>" +
+"</servers>"
+
 $t
 
 # If you assign the text to a data type[xml], you'll
@@ -643,9 +717,10 @@ $list.servers.server
 
 
 # Even changes to the XML contents are possible:
-$list.servers.server[0].ip = "10.10.10.11"
-$list.servers
+$list.servers.server[0].ip = "10.10.10.15"
+$list.servers.server
 
+$list.servers.server | Where-Object { $_.user -eq "Bob" }|Select-Object ip
 
 # The result could be output again as text, including the
 # modification:
