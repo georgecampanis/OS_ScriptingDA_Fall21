@@ -527,13 +527,37 @@ $ComputerName = $env:COMPUTERNAME
 #>
 
 
-
+# local scope
 $ComputerName="DefaultName"
 cd C:\temp
-.\test1.ps1
+.\test1.ps1 #script scope
+
+#"DefaultName"
 
 $ComputerName
+# All scope
+cd C:\temp
+. .\test1.ps1 #script scope
+# ML-RefVm-361229
 
+$ComputerName
+# with allscope
+New-Variable ComputerName -value "DefaultName2"  -Option AllScope -force
+$ComputerName
+
+cd C:\temp
+.\test1.ps1 #script scope
+
+$ComputerName #=> ML-RefVm-361229
+
+#Without allscope
+New-Variable ComputerName -value "DefaultName2"   -force
+$ComputerName
+
+cd C:\temp
+.\test1.ps1 #script scope
+
+$ComputerName #=> DefaultName2
 
 
 <#
