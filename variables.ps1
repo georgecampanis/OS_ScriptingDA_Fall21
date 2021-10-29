@@ -616,6 +616,9 @@ $a
 # Test function with its own local variable scope tries to
 # redefine the variable $setValue:
 Function Test {$setValue = 99; $setValue }
+
+Test
+
 # Read-only variable is created. Test function may modify this
 # value nevertheless by creating a new local variable:
 New-Variable setValue -option "ReadOnly" -value 200
@@ -628,6 +631,11 @@ Remove-Variable setValue -force
 New-Variable setValue -option "ReadOnly,AllScope" -value 200
 Test
 
+Remove-Variable setValue -force
+New-Variable setValue -option "AllScope" -value 200
+Test
+
+remove-item Function:\Test -force # removes func
 
 # The variable will be created only in the current scope and not
 # passed to other scopes. Consequently, it can only be read and
@@ -698,6 +706,14 @@ $xx=10/5.7
 $xx
 
 $xx.GetType().Name
+$x = 12
+$x.GetType().Name
+
+[double]$xd = 12
+$xd.GetType().Name
+
+
+###=> DA class ended Here=>
 
 ###Variable Types and "Strongly Typing"
 (12).GetType().Name
