@@ -1,7 +1,14 @@
 
 #first Fn
-Function myPing { ping.exe -w 100 -n 5 10.0.0.13 }
+Function myPing { ping.exe -w 100 -n 5 10.0.0.16 }
 myPing
+
+Function myRouteTrace{ tracert.exe ML-RefVm-361229}
+myRouteTrace
+Function mygetIp{ nslookup.exe ML-RefVm-361229}
+mygetIp
+
+# ML-RefVm-361229
 
 
 # with args
@@ -16,7 +23,7 @@ myPing $env:COMPUTERNAME
 ${function:New-Guid} | Out-File "C:\temp\guidOut.ps1"
 #$function:tabexpansion > myscript.ps1
 
-
+${function:Get-FileHash} | Out-File "C:\temp\hashOut.ps1"
 
 # Notepad opens the file:
 # You can specify the name of the file after notepad, but $$ is shorter and easier. This special variable always contains the last token of
@@ -24,11 +31,10 @@ ${function:New-Guid} | Out-File "C:\temp\guidOut.ps1"
 notepad $$
 
 
-Set-Item function:test {
-    "This function can neither be deleted nor modified."} -option  constant
+Set-Item function:test {"This function can neither be deleted nor modified."} -option constant
    test
 
-   Remove-Item function:test
+Remove-Item function:test -force
   
    function Howdy {
        #($args -ne $null)=> ($args != null)
@@ -37,7 +43,8 @@ Set-Item function:test {
     "You specified: $args"
     "Argument number: $($args.count)"
     $args | ForEach-Object { $i++; "$i. Argument: $_" }
-    } Else {
+    } 
+    Else {
     "You haven't specified any arguments!"
     }
    }
@@ -62,8 +69,19 @@ function testArrayFn {
    }
    
    testArrayFn Hello test test2
+   testArrayFn ("Hello", "test","test2") 
+   testArrayFn ("Hello", "test","test2") Hello
+
+   testArrayFn [Hello, test,test2] Hello
 
 
+ $myarray=  ("Hello", "test","test2") 
+ $myarray[0]
+
+ testArrayFn $myarray Hello
+ $myarray[3]="added New" # nope can't add a new array val without resize
+
+ ##Ended DA class here
    function SaySomething {
     # No argument was given:
     If ($args -eq $null)
