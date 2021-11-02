@@ -709,21 +709,33 @@ $xx.GetType().Name
 $x = 12
 $x.GetType().Name
 
+$xx = 12.5
+$xx.GetType().Name
+
 [double]$xd = 12
 $xd.GetType().Name
 
 
-###=> DA class ended Here=>
-
 ###Variable Types and "Strongly Typing"
 (12).GetType().Name
+
+[int32]::MaxValue
+[int32]::MinValue
+
+
 (-100000000000).GetType().Name
+[int64]::MaxValue
+[int64]::MinValue
+
 (12.5).GetType().Name
 (12d).GetType().Name
 ("H").GetType().Name
 (Get-Date).GetType().Name
 
 [Byte]$flag = 12
+[Byte]::MaxValue
+[Byte]::MinValue
+
 $flag.GetType().Name
 
 [int16]::MinValue
@@ -732,7 +744,7 @@ $flag.GetType().Name
 $date = "November 12, 2004"
 $date
 $date.GetType().Name
-
+$date.AddDays(-60)
 
 [datetime]$date = "November 12, 2004"
 $date.GetType().Name
@@ -744,9 +756,9 @@ $date.AddDays(-60)
 
 # PowerShell stores a text in XML format as a string:
 $t = "<servers>" +
-"<server name='PC1' ip='10.10.10.10' user='George' />" +
-"<server name='PC2' ip='10.10.10.12' user='Mary'/>" +
-"<server name='PC3' ip='10.10.10.13' user='Bob'/>" +
+"<server name='Server1' ip='10.10.10.10' user='George' rights='admin'><SW OS='Win2000'/></server>" +
+"<server name='Server2' ip='10.10.10.12' user='Mary'><SW OS='Redhat'/></server>" +
+"<server name='Server3' ip='10.10.10.13' user='Bob'> <SW OS='CentOS'/></server>" +
 "</servers>"
 
 $t
@@ -757,14 +769,27 @@ $t
 $list.servers
 
 $list.servers.server
-
+$list.servers.server[2].SW
 
 # Even changes to the XML contents are possible:
 $list.servers.server[0].ip = "10.10.10.15"
 $list.servers.server
+$list.servers.server[1].SW = "Redhat"
+$list.servers.server[1].SW
 
-$list.servers.server | Where-Object { $_.user -eq "Bob" }|Select-Object ip
+
+$list.servers.server | Where-Object { $_.user -eq "George" }|Select-Object ip
 
 # The result could be output again as text, including the
 # modification:
 $list.get_InnerXML()
+
+
+enum CardSuits { 
+    Clubs = 0 
+    Diamonds = 1 
+    Hearts = 2 
+    Spades = 3 } 
+
+[CardSuits]$suit = 'Clubs'
+[CardSuits]$suit2 = 'Diamonds'
