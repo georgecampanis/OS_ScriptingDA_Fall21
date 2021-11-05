@@ -58,25 +58,27 @@ Howdy George Mary Bob Peter
 
 
 function testArrayFn {
-   Foreach ($element in $args) {
+   Foreach ($x in $args) {
    $i++
-   If ($element -is [array]) {
-   "$i. Argument is an array: $element"
+   If ($x -is [array]) {
+   "$i. Argument is an array: $x"
    } Else {
-   "$i. Argument is not an array: $element"
+   "$i. Argument is not an array: $x"
    }
    }
   }
   
   testArrayFn Hello test test2
   function testArrayFV2 {
-  for($i=0;$i -lt $args.count;$i++)
-   {"Array Value: $($args[$i])"}
+   for($i=0;$i -lt $args.count;$i++) { "Array Value: $($args[$i])" }
+  }
+testArrayFV2 Hello test test2 test3
 
-  
+   function   testArrayFV3 {
+   Foreach ($x in $args) {"Array Value: $x" }
 }
   
-testArrayFV2 Hello test test2 test3
+testArrayFV3 Hello test test2 test3
 
 
 
@@ -112,6 +114,15 @@ testArrayFV2 Hello test test2 test3
 function Add{ $args[0] + $args[1]}
 Add 1 2
 Add 1, 2 # will run seperately
+Add "1" "2" #12
+$addthis =Add "1" "2" #12
+
+[int]$myint=3
+$addthis+$myint
+$myint+$addthis
+
+[int] $res=$addthis+$myint
+$res
 
 # setting paras
 function Add {
@@ -128,7 +139,7 @@ function Add {
         }
        Subtract 5 2
        
-       Subtract 5 2 7
+       Subtract 5 2 7 8 9 
 
 # Named arguments can be assigned using parameters;
 # a fixed sequence isn't necessary:
