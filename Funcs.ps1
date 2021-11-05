@@ -58,58 +58,56 @@ Howdy George Mary Bob Peter
 
 
 function testArrayFn {
-    Foreach ($element in $args) {
-    $i++
-    If ($element -is [array]) {
-    "$i. Argument is an array: $element"
-    } Else {
-    "$i. Argument is not an array: $element"
-    }
-    }
+   Foreach ($element in $args) {
+   $i++
+   If ($element -is [array]) {
+   "$i. Argument is an array: $element"
+   } Else {
+   "$i. Argument is not an array: $element"
    }
-   
-   testArrayFn Hello test test2
-   testArrayFn ("Hello", "test","test2") 
-   testArrayFn ("Hello", "test","test2") Hello
-
-   testArrayFn [Hello, test,test2] Hello
-
-
- $myarray=  ("Hello", "test","test2") 
- $myarray[0]
-
- testArrayFn $myarray Hello
- $myarray[3]="added New" # nope can't add a new array val without resize
-
- ##Ended DA class here
-   function SaySomething {
-    # No argument was given:
-    If ($args -eq $null)
-    {
-    "No arguments"
-    # An array was specified as the first argument,
-    # so the function calls itself again
-    # for every argument in the array:
-    }
-    ElseIf ($args[0] -is [array])
-    {
-    Foreach ($element in $args[0])
-    {
-    SaySomething $element
-    }
-    # The first argument is not an array; the actual task was not completed:
-    }
-    Else
-    {
-    "Howdy, $args"
-    }
    }
-   
+  }
+  
+  testArrayFn Hello test test2
+  function testArrayFV2 {
+  for($i=0;$i -lt $args.count;$i++)
+   {"Array Value: $($args[$i])"}
 
-   SaySomething Tobias
-   SaySomething Tobias, Martina, Cof #array
+  
+}
+  
+testArrayFV2 Hello test test2 test3
 
-   #If you'd like to refer to certain arguments, just remember again that $args is an array.
+
+
+  function SaySomething {
+   # No argument was given:
+   If ($args -eq $null)
+   {
+   "No arguments"
+   # An array was specified as the first argument,
+   # so the function calls itself again
+   # for every argument in the array:
+   }
+   ElseIf ($args[0] -is [array])
+   {
+   Foreach ($element in $args[0])
+   {
+   SaySomething $element
+   }
+   # The first argument is not an array; the actual task was not completed:
+   }
+   Else
+   {
+   "Howdy, $args"
+   }
+  }
+  
+
+  SaySomething Tobias
+  SaySomething Tobias, Martina, Cof #array
+
+  #If you'd like to refer to certain arguments, just remember again that $args is an array.
 
 function Add{ $args[0] + $args[1]}
 Add 1 2
@@ -117,19 +115,20 @@ Add 1, 2 # will run seperately
 
 # setting paras
 function Add {
-    $Value1, $Value2 = $args
-    $Value1 + $Value2
-    }
-    Add 1 6
+   $Value1, $Value2 = $args
+   $Value1 + $Value2
+   }
+   Add 1 6
 
-    # NOPE
-    Add 1 2 3
+   # NOPE
+   Add 1 2 3
 
-    Function subtract($Value1, $Value2) {
-        $value1 - $value2
-         }
-        Subtract 5 2
-        
+   Function subtract($Value1, $Value2) {
+       $value1 - $value2
+        }
+       Subtract 5 2
+       
+       Subtract 5 2 7
 
 # Named arguments can be assigned using parameters;
 # a fixed sequence isn't necessary:
@@ -144,17 +143,20 @@ Subtract 5 2 3
 # This function won't accept any optional arguments:
 function Subtract ($Value1, $Value2)
 {
- # Verify whether there are additional inputs;
- # if yes, generate an error message:
- If ($args.Count -ne 0) {
- Throw "I don't need any more than just two arguments." }
- $value1 - $value2
+# Verify whether there are additional inputs;
+# if yes, generate an error message:
+
+If ($args.Count -ne 0) { Throw "I don't need any more than  two arguments." }
+
+$value1 - $value2
+
 }
 Subtract 1 2
 
 Subtract 1 2 3
+Subtract 1 2 3 4
 
-#####    => ended pg 255
+### GO TO Loops.ps1 to learn about Piping, and loops (Do, While, foreach) ===> Come back here after that
 
 ########################## 
 # Scripts
@@ -214,23 +216,20 @@ C:\temp\myscript.ps1 -name "the name" -path "the path"
 
 <# 
 param([string]$Name=$( `
- Throw "Parameter missing: -name Name"),
- [int]$age=$( `
- Throw "Parameter missing: -age x as number")) `
- "Hello $name, you are $age years old!" 
- #>
+Throw "Parameter missing: -name Name"),
+[int]$age=$( `
+Throw "Parameter missing: -age x as number")) `
+"Hello $name, you are $age years old!" 
+#>
 
 
 
 
 
 
- C:\temp\myscript3.ps1
- C:\temp\myscript3.ps1 -name George
- C:\temp\myscript3.ps1 -name George C
- C:\temp\myscript3.ps1 -name George 48
-
- ### end pg 288
- 
+C:\temp\myscript3.ps1
+C:\temp\myscript3.ps1 -name George
+C:\temp\myscript3.ps1 -name George C
+C:\temp\myscript3.ps1 -name George 48
 
 
