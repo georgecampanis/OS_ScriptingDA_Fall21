@@ -118,10 +118,12 @@ Add "1" "2" #12
 $addthis =Add "1" "2" #12
 
 [int]$myint=3
-$addthis+$myint
-$myint+$addthis
+($addthis+$myint).GetType().Name # String
+($myint+$addthis).GetType().Name # INT32
 
-[int] $res=$addthis+$myint
+
+
+$res=$addthis+$myint
 $res
 
 # setting paras
@@ -134,8 +136,8 @@ function Add {
    # NOPE
    Add 1 2 3
 
-   Function subtract($Value1, $Value2) {
-       $value1 - $value2
+   Function subtract($V1, $V2) {
+       $V1 - $V2
         }
        Subtract 5 2
        
@@ -143,9 +145,9 @@ function Add {
 
 # Named arguments can be assigned using parameters;
 # a fixed sequence isn't necessary:
-Subtract -Value1 12 2
+Subtract 12 2
 
-Subtract -Value2 12 2
+Subtract -V2 12 -V1 2
 
 # Unnecessary arguments will be ignored:
 Subtract 5 2 3
