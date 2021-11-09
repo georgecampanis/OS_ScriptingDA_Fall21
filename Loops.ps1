@@ -180,9 +180,7 @@ ForEach-Object { ($_.Name)*7; "======="; $_.Group}
 
  Get-WmiObject Win32_Service | ? { $_.Started } | % {
     "{0}({1})"-f $_.Caption,  $_.Started  }#, $_.Name, $_.Description
-#################################
-###==> DBA Class Start Here
-#################################
+
 notepad
 
     Get-Process notepad | ForEach-Object { $_.Kill() }# envoke methods
