@@ -2,8 +2,8 @@
 
 Dir | more
 
-Dir | Sort-Object Length -Descending | Select-Object Name, Length | ConvertTo-Html | Out-File "C:\temp\report2.html"
-.\report2.html
+Dir | Sort-Object Length -Descending | Select-Object Name, Length | ConvertTo-Html | Out-File "C:\temp\reportDA.htm"
+.\reportDA.htm
 
 # pipeline cmdlets and functions
 
@@ -26,8 +26,8 @@ temporarily before Sort-Object can process them, the memory space
 requirement is very high. I
 #>
 
-Dir c:\ -recurse | more
-Dir c:\ -recurse | Out-Host -paging
+Dir c:\temp -recurse | more
+Dir c:\temp -recurse | Out-Host -paging
 
 
 
@@ -51,6 +51,8 @@ Dir | Format-Table * -wrap
 #PowerShell uses Format-List instead of Format-Table whenever there are more than five propertiesto display
 Dir | Format-List *
 
+Dir | Format-Table Name, Length, Extension, CreationTime
+
 
 #Transforming objects produced by the pipeline is carried out by formatting cmdlets.
 Get-Command -verb format
@@ -68,10 +70,9 @@ Dir | Format-Table Name, { [int]($_.Length/1KB) }
 Dir | Format-Table Name, Length, {(New-TimeSpan $_.LastWriteTime (Get-Date)).Days} -autosize
 
 
-$column1 = @{Expression={ [int]($_.Length/1KB) }; Label="KB";  }
-$column2 = @{Expression="LastWriteTime"; Label="Written"; width=130 ; alignment="right" }
+$column1 = @{Expression={ [int]($_.Length/1KB) }; Label="KB";  width=150 }
+$column2 = @{Expression="LastWriteTime"; Label="Written"; width=150 ; alignment="right" }
 Dir | Format-Table  Name, $column1,$column2 
-
 
 
 <#
@@ -103,11 +104,45 @@ Dir | Sort-Object -property Length -descending # -property allows you to use any
 Dir | Sort-Object Length, Name
 
 
+#grouping
+Get-Service | Group-Object Status
 
+$result = Get-Service | Group-Object Status
+$result[1].Group
+
+$result.GetType().Name
+
+Dir  | Group-Object Extension | Sort-Object Count -descending
+
+
+Dir | Group-Object {$_.Length -gt 100KB}
+
+$result2 = Dir | Group-Object {$_.Length -gt 350KB}
+$result2[1].Group
+
+
+Dir | Group-Object {$_.name.SubString(0,1).toUpper()}
+Dir | Group-Object {$_.name.SubString(0,$_.name.IndexOf(".")).toUpper()}
+
+
+$myString="Mahesh Chand, Henry He, Chris Love, Raj Beniwal, Praveen Kumar"
+[int] $str1= $myString.IndexOf("Chand")
+[int] $str2= $myString.IndexOf("Raj")
+
+$res=$myString.Substring($str1, $str2-$str1)
+$res
+
+Dir | Group-Object {$_.name.SubString(0,1)}
+
+# =>foreach
+Dir | Group-Object {$_.name.SubString(0,1).toUpper()} | 
+ForEach-Object { ($_.Name)*7; "======="; $_.Group} 
 
 
 #The hash table makes it possible to append additional information to a property, so you can separately specify for each property the sorting sequence you prefer
 Dir | Sort-Object @{expression="Length";Descending=$true}, @{expression="Name";Ascending=$true}
+
+
 
 $hash=@{"Tobias"=90;"Martina"=90;"Cofi"=80;"Zumsel"=100}
 $hash | Sort-Object Value -descending
@@ -123,38 +158,16 @@ Foreach($p in $presidents)
 {
     if($p.LName -eq "Obama")
     {
+        "This president: $($p.FName) $($p.LName) was awesome!"
         "This president: {0} {1} {2}" -f $p.FName, $p.LName, "was awesome!"
+        "This president: {0} {1} was awesome!" -f $p.FName, $p.LName
     }else {
         "This president: {0} {1} {2}" -f $p.FName, $p.LName, "was good, but not awesome!"
         }
     
 }
 
-
-
-#grouping
-Get-Service | Group-Object Status
-
-$result = Get-Service | Group-Object Status
-$result[1].Group
-
-
-Dir | Group-Object Extension | Sort-Object Count -descending
-
-
-Dir | Group-Object {$_.Length -gt 100KB}
-
-$result2 = Dir | Group-Object {$_.Length -gt 350KB}
-$result2[1].Group
-
-
-Dir | Group-Object {$_.name.SubString(0,1).toUpper()}
-Dir | Group-Object {$_.name.SubString(0,1)}
-
-# =>foreach
-Dir | Group-Object {$_.name.SubString(0,1).toUpper()} | 
-ForEach-Object { ($_.Name)*7; "======="; $_.Group} 
-
+# <======= DA Class Start Here
 
  #########################
  ## ForEach-Object
@@ -180,9 +193,7 @@ ForEach-Object { ($_.Name)*7; "======="; $_.Group}
 
  Get-WmiObject Win32_Service | ? { $_.Started } | % {
     "{0}({1})"-f $_.Caption,  $_.Started  }#, $_.Name, $_.Description
-#################################
-###==> DBA Class Start Here
-#################################
+
 notepad
 
     Get-Process notepad | ForEach-Object { $_.Kill() }# envoke methods
