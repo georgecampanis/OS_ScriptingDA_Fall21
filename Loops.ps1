@@ -167,7 +167,7 @@ Foreach($p in $presidents)
     
 }
 
-# <======= DA Class Start Here
+
 
  #########################
  ## ForEach-Object
@@ -182,7 +182,7 @@ Foreach($p in $presidents)
  Get-WmiObject Win32_Service |  ForEach-Object {
  if ($_.Started) {
  "{0}({1}) " -f $_.Caption, $_.Started
-    }
+   }
  }
 
 
@@ -202,7 +202,7 @@ notepad
 
 Notepad
 $processes = @(Get-Process notepad)
-$process=$processes[0]
+$process=$processes[2]
 $process.StartTime
 
 New-TimeSpan $processes[0].StartTime (Get-Date)
@@ -221,7 +221,7 @@ Get-Process notepad | ForEach-Object {$_.Kill();}
 
 Get-Process notepad | ForEach-Object {
     $time = (New-TimeSpan $_.StartTime (Get-Date)).TotalSeconds;
-    if ($time -lt 1000) {
+    if ($time -lt (1000-15)) {
     "Stop process $($_.id) after $time seconds...";
     $_.Kill()
     }
@@ -249,12 +249,25 @@ Get-Process notepad| Format-Table Id, ProcessName, StartTime
  }
 
 
+####
+$day=9
+switch ( $day ) {
+    0 { 'Sunday' } 
+    1 { 'Monday' } 
+    2 { 'Tuesday' } 
+    3 { 'Wednesday' } 
+    4 { 'Thursday' } 
+    5 { 'Friday' } 
+    6 { 'Saturday' } 
+    default {"This is not a day of the week"}
+}
+
 
 # filters results out before you can use them so use switch statement to get all possibilities
  Switch (Get-Process notepad) {
     {
     $time = (New-TimeSpan $_.StartTime (Get-Date)).TotalSeconds;
-    $time -le 1
+    $time -le 1000
     }
     {
     "Stop process $($_.id) after $time seconds...";
@@ -276,6 +289,12 @@ Dir C:\ -recurse | ForEach-Object { $_.name } # good option
 
 # Create your own array:
 $array = 3,6,"Hello",12
+
+
+$array[0]*$array[2]
+
+$array[0].GetType().Name
+$array[2].GetType().Name
 
 # Read out this array element by element:
 foreach ($e in $array) {
@@ -329,7 +348,7 @@ Foreach ($entry in dir c:\) {
     }
    }
    
-
+## Start here for DA Class
    ######
    # Do While
    ####endregion
@@ -520,8 +539,6 @@ Dir | Sort-Object Length -descending |Select-Object -first 5
 
 # List the five longest-running processes:
 Get-Process | Sort-Object StartTime |Select-Object -last 5 | Format-Table ProcessName, StartTime
-
-# -ea => -ErrorAction SilentlyContinue
 
 # Alias shortcuts make the line shorter but also harder to read:
 gps | sort StartTime -ea SilentlyContinue |select -last 5 | ft ProcessName, StartTime
