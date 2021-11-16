@@ -521,6 +521,8 @@ Dir | Sort-Object Length -descending |Select-Object -first 5
 # List the five longest-running processes:
 Get-Process | Sort-Object StartTime |Select-Object -last 5 | Format-Table ProcessName, StartTime
 
+# -ea => -ErrorAction SilentlyContinue
+
 # Alias shortcuts make the line shorter but also harder to read:
 gps | sort StartTime -ea SilentlyContinue |select -last 5 | ft ProcessName, StartTime
 
