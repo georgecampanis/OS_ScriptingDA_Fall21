@@ -243,7 +243,7 @@ Switch -regex ($text)
 
 #Process several vals
 $array = 1..5
-Switch ($array) # ICE Build Func
+Switch ($array) 
 {
  {$_ % 2} { "$_ is odd."}# mod
  Default { "$_ is even."}
