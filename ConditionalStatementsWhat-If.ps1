@@ -55,11 +55,6 @@ $a -gt 5
 
 ( ($age -ge 18) -and ($sex -eq "m") )
 
-<#
-logical operators pg 210
-
-
-#>
 
 #In the simplest case, use the comparison operator -eq (equal) to find all elements in an array equal to the specified value
 1,2,3,4,3,2,1 -eq 3
