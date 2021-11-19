@@ -32,6 +32,7 @@ Operator	        Conventional	Example	                 Result
 -cnotcontains, 
 -inotcontains		                1,2,3 -notcontains 1	$false
 
+ ###Logical operators####
 -and    Both conditions must be met
 -or     At least one of the two conditions must be met
 -xor    One or the other condition must be met, but not both
