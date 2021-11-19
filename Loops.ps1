@@ -357,12 +357,15 @@ Foreach ($entry in dir c:\) {
    } While (!($input -like "www.*.*"))
   
    # Open a file for reading:
-$file = [system.io.file]::OpenText("C:\autoexec.bat")
+$file = [system.io.file]::OpenText("C:\temp\reportDA.htm")
+$file.GetType().Name
 # Continue loop until the end of the file has been reached:
 While (!($file.EndOfStream)) {
  # Read and output current line from the file:
  $file.ReadLine()
 }
+
+
 
 
 
@@ -419,6 +422,8 @@ While ($i -lt 5) {
  $i++
  $i
 } 
+
+
 # Second expression: the For loop behaves like the While loop:
 $i = 0
 For (;$i -lt 5;) {
