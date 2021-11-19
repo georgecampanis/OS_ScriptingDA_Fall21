@@ -32,8 +32,13 @@ Operator	        Conventional	Example	                 Result
 -cnotcontains, 
 -inotcontains		                1,2,3 -notcontains 1	$false
 
-
+-and    Both conditions must be met
+-or     At least one of the two conditions must be met
+-xor    One or the other condition must be met, but not both
+-not    Reverses the result
 #>
+
+
 4 -eq 10 # equal to
 "secret" -ieq "SECRET"
 
