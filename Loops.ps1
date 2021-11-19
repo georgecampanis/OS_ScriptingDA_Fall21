@@ -473,149 +473,67 @@ Foreach ($wmiclass in "Win32_Service","Win32_UserAccount","Win32_Process")
 }
 }
 
+#############################################################
+#    TRY CATCH
+############################################################
 
-
-
-#Back to Pipeline chapter page 127
-Dir | Format-Table -property Extension, Name -groupBy Extension
-
-Dir | Sort-Object Extension, Name -Descending | Format-Table -groupBy Extension
-
-
-#Filtering Objects Out of the Pipeline
-$result = Get-Service
-$result[0] | Format-List *
-
-function MyFunc([string] $ServiceName)
-{
-
-
-
+# TRY CATCH Finally
+# ref: https://jeffbrown.tech/using-exception-messages-with-try-catch-in-powershell/
+try {
+    New-Item -Path C:\doesnotexist -Name myfile.txt  -ItemType File  -ErrorAction Stop
+}
+catch {
+    Write-Warning -Message "Oops, ran into an issue"
 }
 
-Get-Service | Where-Object { $_.ServiceName -eq "gupdate"}
+# grab ps error
+try {
+    New-Item -Path C:\doesnotexist  -Name myfile.txt -ItemType File -ErrorAction Stop
+}
+catch {
+    Write-Warning $Error[0] # $error array of errors [0] is the last error
+}
 
-Get-Service | Where-Object { $_.Status -eq "Running" }
-$services = Get-WmiObject Win32_Service
-$services[0] | Format-List *
-
-
-Get-WmiObject Win32_Service |
- ? {($_.Started -eq $false) -and ($_.StartMode -eq "Auto")} |
- Format-Table 
-
- Get-WmiObject -query "select * from win32_Service where `
- Started=false and StartMode='Auto'" | Format-Table
-
- #Selecting Object Properties
- Get-WmiObject Win32_UserAccount -filter `
- "LocalAccount=True AND Name='guest'"
-
- Get-WmiObject Win32_UserAccount -filter `
- "LocalAccount=True AND Name='guest'" |
- Select-Object Name, Disabled, Description
-
- <# The significant difference: Format-Table converts properties specified to the object into text. In
-contrast, Select-Object creates a completely new object containing just these specified properties: #>
-
-Get-WmiObject Win32_UserAccount -filter `
- "LocalAccount=True AND Name='guest'" |
- Select-Object Name, Disabled, Description |
- Format-Table *
-
-<#  You should make sparing use of Select-Object because it takes a
- disproportionate effort to create a new object. Instead, use
- formatting cmdlets to specify which object properties are to be
- displayed. Select-Object is particularly useful when you don't want
- to convert a pipeline result into text, but instead want to output a
- comma-separated list using Export-Csv or HTML code using ConvertTo-Html. #>
-
- Dir | Select-Object * -exclude PS*
-
-
- #Limiting Number of Objects
- # List the five largest files in a directory:
-Dir | Sort-Object Length -descending |Select-Object -first 5
-
-# List the five longest-running processes:
-Get-Process | Sort-Object StartTime |Select-Object -last 5 | Format-Table ProcessName, StartTime
-
-# Alias shortcuts make the line shorter but also harder to read:
-gps | sort StartTime -ea SilentlyContinue |select -last 5 | ft ProcessName, StartTime
-
-
-#Processing All Pipeline Results Simultaneously
-
-Get-Service | ForEach-Object {
-    "The service {0} is called '{1}': {2}" -f `
-    $_.Name, $_.DisplayName, $_.Status }
-
-    #Removing Dups - must be SORTED First
-    1,2,3,1,2,3,1,2,3 | Get-Unique
-
-    1,2,3,1,2,3,1,2,3 | Sort-Object | Get-Unique
-
-#Statistical Calculations
-Dir | Measure-Object Length
-Dir | Measure-Object Length -average -maximum -minimum -sum
-
-<# #Measure-Object can also search through other text files and ascertain the frequency of characters,
-words, and lines in them #>
-Get-Content C:\temp\test.txt | Measure-Object -character -line -word
-
-# Comparing Before-and-After Conditions
-$s1 = "orge"
-$s2 = "George"
-Compare-Object $s1 $s2
-
-
-$before = Get-Process
-$after = Get-Process
-Compare-Object $before $after
+try {
+    New-Item -Path C:\doesnotexist `
+        -Name myfile.txt `
+        -ItemType File `
+        -ErrorAction Stop
+}
+catch {
+    $message = $_
+    Write-Warning "Something happened! $message"
+}
 
 
 
-#Detecting Changes to Objects
+try {
+    New-Item -Path C:\doesnotexist `
+        -Name myfile.txt `
+        -ItemType File `
+        -ErrorAction Stop
+}
+catch [System.NotSupportedException] { #
+    Write-Warning "Bad char found in path!"
+}
+catch [System.IO.DirectoryNotFoundException] { #System.IO.DirectoryNotFoundException
+    Write-Warning "File could not be found!"
+}
+catch{
+    Write-Warning "An unexpected error occured!"
+}
 
-# Save current state:
-$before = Get-Service
-# Pick out a service and stop this service:
-# (Note: this usually requires administrator rights.
-# Stop services only if you are sure that the service
-# is absolutely not required.
-$service = Get-Service wuauserv
-$service.Stop()
-# Record after state:
-$after = Get-Service
-# A simple comparison will not find differences because
-# the service existed before and after:
-Compare-Object $before $after
-# A comparison of the Status property reports the halted
-# service but not its name:
-Compare-Object $before $after -Property Status
+$error[0].Exception.GetType().Fullname
+#System.IO.DirectoryNotFoundException
 
-#Saving Snapshots for Later Use
-Get-Process | Export-Clixml before.xml
-$before = Import-Clixml before.xml
-$after = Get-Process
-Compare-Object $before $after
+#### FINALLY
+try{
+ 1/0
+}
+catch [DivideByZeroException] { Write-Host “Divide by zero exception”}
+catch { Write-Host “Other exception”}
+finally{ Write-Host “cleaning up …”}
 
-#Exporting Pipeline Results
-Get-Command -verb out
 
-Dir | Out-File output.txt .\output.txt
-Dir | Out-Printer
 
-# This command not only creates a new directory but also returns
-# the new directory:
-md testdirectory
-rm testdirectory
 
-# Here the command output is sent to "nothing"
-md testdirectory | Out-Null
-rm testdirectory
-# That matches the following redirection:
-md testdirectory > $null
-rm testdirectory
-
-#Changing Pipeline Formatting
