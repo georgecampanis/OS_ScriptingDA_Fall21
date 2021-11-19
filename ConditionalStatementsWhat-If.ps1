@@ -1,6 +1,37 @@
-<#
 
-Read pg 206 table of operators
+<# 
+Dry Runs: Simulating Operations
+
+If you'd like to first find out what effects a particular command could have when you use it, try
+simulation. PowerShell will make no changes to your system but show you what would happen if you
+were to run a command without simulation. Use the -whatif parameter, which many cmdlets
+support, to turn on simulation.
+
+#>
+
+# What exactly would happen if Stop-Process
+# ended all processes beginning with "c"?
+Stop-Process -Name c* -WhatIf
+
+
+<# PowerShell OPERATORS
+
+Operator	        Conventional	Example	                 Result
+-eq, -ceq, -ieq	    =	            10 -eq 15 	            $false
+-ne, -cne, -ine	    <>	            10 -ne 15	            $true
+-gt, -cgt, -igt	    >	            10 -gt 15	            $false
+-ge, -cge, -ige	    >=	            10 -ge 15	            $false
+-lt, -clt, -ilt	    <	            10 -lt 15	            $true
+-le, -cle, -ile	    <=	            10 -le 15	            $true
+
+-contains, 
+-ccontains, 
+-icontains		                    1,2,3 -contains 1	    $true
+
+-notcontains, 
+-cnotcontains, 
+-inotcontains		                1,2,3 -notcontains 1	$false
+
 
 #>
 4 -eq 10 # equal to
