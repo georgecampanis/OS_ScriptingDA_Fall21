@@ -535,17 +535,26 @@ catch {
 try {
     New-Item -Path C:\doesnotexist   -Name myfile.txt  -ItemType File  -ErrorAction Stop
 }
-catch [System.NotSupportedException] { #
-    Write-Warning "Bad char found in path!"
-}
-catch [System.IO.DirectoryNotFoundException] { #System.IO.DirectoryNotFoundException
-    Write-Warning "File could not be found!"
+#catch [System.NotSupportedException] { #
+ #   Write-Warning "Bad char found in path!"
+#}
+catch [System.IO.DirectoryNotFoundException],[System.NotSupportedException]  { #System.IO.DirectoryNotFoundException
+    Write-Warning "File could not be found or a bad char was included!"
 }
 catch{
     Write-Warning "An unexpected error occured!"
 }
 finally{ 
     Write-Host "cleaning up loose ends…"
+}
+
+Try{
+    1/"this"
+}
+catch [System.NotSupportedException]
+{Write-Warning "ooops"}
+catch{
+    Write-Warning "An unexpected error occured!"
 }
 
 

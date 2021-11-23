@@ -1,13 +1,8 @@
-﻿
-
-
-function createUser(){
-Clear-Host;
-Write-Host "Createing User...";
-
+﻿function createUser(){
+Clear-Host;Write-Host "Creating User...";
 }
 
-Clear-Host;
+Clear-Host
 
 Do {
 
@@ -34,5 +29,5 @@ Switch ($Select)
     }
 }
 While ($Select -ne 5)
-
+#Until($Select -eq 5)
 
