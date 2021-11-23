@@ -168,12 +168,12 @@ Switch ($value)
 
 # a little more...
 
-$value = 50
+$value = 6
 Switch ($value)
 {
- {$_ -le 5} { "$_is a number from 1 to 5" }
+ ({$_ -le 5}) { "$_is a number from 1 to 5" }
  6 { "Number 6" }
- {(($_ -gt 6) -and ($_ -le 10))}
+ {(($_ -ge 6) -and ($_ -le 10))}
  { "$_ is a number from 7 to 10" }
  # The code after the next statement will be
  # executed if no other condition has been met:
@@ -237,7 +237,7 @@ Switch -regex ($text)
 }
 
 #Process several vals
-$array = 1..5
+$array = 1..50
 Switch ($array) 
 {
  {$_ % 2} { "$_ is odd."}# mod
