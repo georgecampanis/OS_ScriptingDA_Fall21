@@ -78,9 +78,10 @@ Write-au2matorLog -Type Info -Text "Create Backup Dirs and Check all Folders an 
 try {
     #Create Backup Dir
     ###### FIXED #####
+    $BackupfolderPath="\Backup-" + (Get-Date -format yyyy-MM-dd) + "-" + (Get-Random -Maximum 100000)
+
     if ($UseStaging -and $Zip) {
         #Logging "INFO" "Use Temp Backup Dir"
-        $BackupfolderPath="\Backup-" + (Get-Date -format yyyy-MM-dd) + "-" + (Get-Random -Maximum 100000)
         $BackupDestination = $StagingPath + $BackupfolderPath + "\"
     }
     else {
@@ -156,6 +157,7 @@ if ($PreCheck) {
         $SumCount = 0
         $colItems = 0
         $ExcludeString = ""
+        
 foreach ($Entry in $ExcludeDirs.ToUpper()) {
     #Exclude the directory itself
     $Temp = "^" + $Entry.Replace("\", "\\") + "$"
